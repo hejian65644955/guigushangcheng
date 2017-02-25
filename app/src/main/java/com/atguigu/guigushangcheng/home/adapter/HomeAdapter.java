@@ -1,6 +1,7 @@
 package com.atguigu.guigushangcheng.home.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 import com.youth.banner.transformer.BackgroundToForegroundTransformer;
+import com.zhy.magicviewpager.transformer.RotateYTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +110,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             case CHANNEL:
                 return new ChannelViewHolder(inflater.inflate(R.layout.channel_item, null), mContext);
             case ACT:
-                break;
+                return new ActViewHolder(inflater.inflate(R.layout.act_item, null), mContext);
             case SECKILL:
                 break;
             case RECOMMEND:
@@ -116,6 +118,42 @@ public class HomeAdapter extends RecyclerView.Adapter {
         }
 
         return null;
+    }
+
+    class ActViewHolder extends RecyclerView.ViewHolder {
+
+        private final Context mContext;
+        @InjectView(R.id.act_viewpager)
+        ViewPager actViewpager;
+        ViewPageAdapter adapter;
+
+        public ActViewHolder(View itemView, Context mContext) {
+            super(itemView);
+            this.mContext = mContext;
+            ButterKnife.inject(this,itemView);
+
+        }
+
+        public void setData(List<HomeBean.ResultBean.ActInfoBean> act_info) {
+            adapter =  new ViewPageAdapter(mContext, act_info);
+            actViewpager.setAdapter(adapter);
+
+            actViewpager.setPageMargin(20);//设置page间间距，自行根据需求设置
+            actViewpager.setOffscreenPageLimit(3);//>=3
+            actViewpager.setAdapter(adapter);
+            //setPageTransformer 决定动画效果
+            actViewpager.setPageTransformer(true, new
+                    RotateYTransformer());
+
+            //设置点击事件
+            adapter.setOnItemClickListener(new ViewPageAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Toast.makeText(mContext, "postion=="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
     class ChannelViewHolder extends RecyclerView.ViewHolder {
@@ -126,7 +164,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
         public ChannelViewHolder(View itemView, Context mContext) {
             super(itemView);
-            ButterKnife.inject(this,itemView);
+            ButterKnife.inject(this, itemView);
             this.mComtext = mContext;
         }
 
@@ -193,6 +231,8 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 channelViewHolder.setData(result.getChannel_info());
                 break;
             case ACT:
+                ActViewHolder actViewHolder = (ActViewHolder) holder;
+                actViewHolder.setData(result.getAct_info());
                 break;
             case SECKILL:
                 break;
@@ -205,6 +245,6 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }
