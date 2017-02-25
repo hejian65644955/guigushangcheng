@@ -2,12 +2,14 @@ package com.atguigu.guigushangcheng.home.adapter;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.guigushangcheng.R;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.iwgang.countdownview.CountdownView;
 
 /**
  * Created by 何健 on 2017/2/23.
@@ -112,12 +115,43 @@ public class HomeAdapter extends RecyclerView.Adapter {
             case ACT:
                 return new ActViewHolder(inflater.inflate(R.layout.act_item, null), mContext);
             case SECKILL:
-                break;
+                return new SeckillViewHolder(inflater.inflate(R.layout.seckill_item, null), mContext);
             case RECOMMEND:
                 break;
         }
 
         return null;
+    }
+
+    class SeckillViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.countdownview)
+        CountdownView countdownview;
+        @InjectView(R.id.tv_more_seckill)
+        TextView tvMoreSeckill;
+        @InjectView(R.id.rv_seckill)
+        RecyclerView rvSeckill;
+        private final Context mContext;
+        SeckillRecyclerViewAdapter adapter;
+
+        public SeckillViewHolder(View itemView, Context mContext) {
+            super(itemView);
+            this.mContext = mContext;
+            ButterKnife.inject(this,itemView);
+        }
+
+        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info) {
+            adapter = new SeckillRecyclerViewAdapter(mContext, seckill_info);
+            rvSeckill.setAdapter(adapter);
+            //设置布局管理器
+            rvSeckill.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false));
+            //设置点击事件
+            adapter.setOnItemClickListener(new SeckillRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     class ActViewHolder extends RecyclerView.ViewHolder {
@@ -130,12 +164,11 @@ public class HomeAdapter extends RecyclerView.Adapter {
         public ActViewHolder(View itemView, Context mContext) {
             super(itemView);
             this.mContext = mContext;
-            ButterKnife.inject(this,itemView);
-
+            ButterKnife.inject(this, itemView);
         }
 
         public void setData(List<HomeBean.ResultBean.ActInfoBean> act_info) {
-            adapter =  new ViewPageAdapter(mContext, act_info);
+            adapter = new ViewPageAdapter(mContext, act_info);
             actViewpager.setAdapter(adapter);
 
             actViewpager.setPageMargin(20);//设置page间间距，自行根据需求设置
@@ -149,7 +182,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnItemClickListener(new ViewPageAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Toast.makeText(mContext, "postion=="+position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "postion==" + position, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -235,6 +268,8 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 actViewHolder.setData(result.getAct_info());
                 break;
             case SECKILL:
+                SeckillViewHolder seckillViewHolder = (SeckillViewHolder) holder;
+                seckillViewHolder.setData(result.getSeckill_info());
                 break;
             case RECOMMEND:
                 break;
@@ -245,6 +280,6 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }
