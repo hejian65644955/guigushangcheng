@@ -24,9 +24,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static android.R.attr.data;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 public class WebViewActivity extends AppCompatActivity {
 
     @InjectView(R.id.ib_back)
