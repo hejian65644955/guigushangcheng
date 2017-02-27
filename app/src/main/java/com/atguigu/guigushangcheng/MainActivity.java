@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                }
                ft.add(R.id.fl_main,currentFragment);
            }else{
-
                if(tempFragment!=null){
                    ft.hide(tempFragment);
                }

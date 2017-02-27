@@ -62,8 +62,6 @@ public class RecommendGridViewAdapter extends BaseAdapter {
         viewHolder.tvName.setText(infoEntity.getName());
         viewHolder.tvPrice.setText("￥"+infoEntity.getCover_price());
         Glide.with(mContext).load(Constants.BASE_URL_IMAGE+infoEntity.getFigure()).into(viewHolder.ivRecommend);
-
-
         return convertView;
     }
 

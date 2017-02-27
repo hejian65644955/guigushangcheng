@@ -15,9 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.guigushangcheng.R;
+import com.atguigu.guigushangcheng.app.WebViewActivity;
 import com.atguigu.guigushangcheng.home.activity.GoodsInfoActivity;
 import com.atguigu.guigushangcheng.home.bean.GoodsBean;
 import com.atguigu.guigushangcheng.home.bean.HomeBean;
+import com.atguigu.guigushangcheng.home.bean.WebviewBean;
 import com.atguigu.guigushangcheng.home.view.MyGridView;
 import com.atguigu.guigushangcheng.utils.Constants;
 import com.bumptech.glide.Glide;
@@ -40,6 +42,7 @@ import cn.iwgang.countdownview.CountdownView;
 
 public class HomeAdapter extends RecyclerView.Adapter {
     public static final String GOODS_BEAN = "goods_bean";
+    public static final String WEBVIEW_BEAN = "webview_bean";
     private final Context mContext;
 
     /**
@@ -74,7 +77,6 @@ public class HomeAdapter extends RecyclerView.Adapter {
     //当前类型
     public int currentType = BANNER;
     private final LayoutInflater inflater;
-
 
 
     @Override
@@ -148,7 +150,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
         public HotViewHolder(View itemView, Context mContext) {
             super(itemView);
             this.mContext = mContext;
-            ButterKnife.inject(this,itemView);
+            ButterKnife.inject(this, itemView);
         }
 
         public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
@@ -159,8 +161,9 @@ public class HomeAdapter extends RecyclerView.Adapter {
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position=="+position, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
                 }
+
             });
         }
     }
@@ -196,7 +199,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     goodsBean.setFigure(InfoBean.getFigure());
                     goodsBean.setProduct_id(InfoBean.getProduct_id());
                     Intent intent = new Intent(mContext, GoodsInfoActivity.class);
-                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    intent.putExtra(GOODS_BEAN, goodsBean);
                     mContext.startActivity(intent);
 
 
@@ -255,7 +258,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.inject(this, itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.ActInfoBean> act_info) {
+        public void setData(final List<HomeBean.ResultBean.ActInfoBean> act_info) {
             adapter = new ViewPageAdapter(mContext, act_info);
             actViewpager.setAdapter(adapter);
 
@@ -270,7 +273,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnItemClickListener(new ViewPageAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Toast.makeText(mContext, "postion==" + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "postion==" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.ActInfoBean actInfoBean = act_info.get(position);
+                    WebviewBean webviewBean = new WebviewBean();
+                    webviewBean.setIcon_url(actInfoBean.getIcon_url());
+                    webviewBean.setName(actInfoBean.getName());
+                    webviewBean.setUrl(actInfoBean.getUrl());
+
+                    Intent intent = new Intent(mContext, WebViewActivity.class);
+                    intent.putExtra(WEBVIEW_BEAN, webviewBean);
+                    mContext.startActivity(intent);
                 }
             });
 
@@ -310,7 +322,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             banner = (Banner) itemView.findViewById(R.id.banner);
         }
 
-        public void setData(List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
+        public void setData(final List<HomeBean.ResultBean.BannerInfoBean> banner_info) {
             //得到数据
             List<String> images = new ArrayList<>();
             //设置Banner的数据
@@ -330,52 +342,82 @@ public class HomeAdapter extends RecyclerView.Adapter {
             banner.setBannerAnimation(BackgroundToForegroundTransformer.class);
             //3.设置Banner的点击事件
             banner.setOnBannerListener(new OnBannerListener() {
-                @Override
-                public void OnBannerClick(int position) {
-                    //Toast.makeText(mContext, "Position==" + position, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
-                    mContext.startActivity(intent);
+                                           @Override
+                                           public void OnBannerClick(int position) {
+                                               if (position < banner_info.size()) {
+                                                   String product_id = "";
+                                                   String name = "";
+                                                   String cover_price = "";
+                                                   String image = "";
+                                                   if (position == 0) {
+                                                       product_id = "627";
+                                                       cover_price = "32.00";
+                                                       name = "剑三T恤批发";
+                                                   } else if (position == 1) {
+                                                       product_id = "21";
+                                                       cover_price = "8.00";
+                                                       name = "同人原创】剑网3 剑侠情缘叁 Q版成男 口袋胸针";
+                                                   } else {
+                                                       product_id = "1341";
+                                                       cover_price = "50.00";
+                                                       name = "【蓝诺】《天下吾双》 剑网3同人本";
+                                                   }
 
-                }
-            });
+                                                   image = banner_info.get(position).getImage();
+
+                                                   GoodsBean goodsBean = new GoodsBean();
+                                                   goodsBean.setProduct_id(product_id);
+                                                   goodsBean.setName(name);
+                                                   goodsBean.setCover_price(cover_price);
+                                                   goodsBean.setFigure(image);
+
+
+                                                   Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+
+                                                   intent.putExtra(GOODS_BEAN, goodsBean);
+                                                   mContext.startActivity(intent);
+                                               }
+                                           }
+                                       }
+                );
+            }
+        }
+
+        //绑定数据
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            switch (getItemViewType(position)) {
+                case BANNER:
+                    BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
+                    bannerViewHolder.setData(result.getBanner_info());
+                    break;
+                case CHANNEL:
+                    ChannelViewHolder channelViewHolder = (ChannelViewHolder) holder;
+                    channelViewHolder.setData(result.getChannel_info());
+                    break;
+                case ACT:
+                    ActViewHolder actViewHolder = (ActViewHolder) holder;
+                    actViewHolder.setData(result.getAct_info());
+                    break;
+                case SECKILL:
+                    SeckillViewHolder seckillViewHolder = (SeckillViewHolder) holder;
+                    seckillViewHolder.setData(result.getSeckill_info());
+                    break;
+                case RECOMMEND:
+                    RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
+                    recommendViewHolder.setData(result.getRecommend_info());
+                    break;
+                case HOT:
+                    HotViewHolder hotViewHolder = (HotViewHolder) holder;
+                    hotViewHolder.setData(result.getHot_info());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 6;
         }
     }
-
-    //绑定数据
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        switch (getItemViewType(position)) {
-            case BANNER:
-                BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
-                bannerViewHolder.setData(result.getBanner_info());
-                break;
-            case CHANNEL:
-                ChannelViewHolder channelViewHolder = (ChannelViewHolder) holder;
-                channelViewHolder.setData(result.getChannel_info());
-                break;
-            case ACT:
-                ActViewHolder actViewHolder = (ActViewHolder) holder;
-                actViewHolder.setData(result.getAct_info());
-                break;
-            case SECKILL:
-                SeckillViewHolder seckillViewHolder = (SeckillViewHolder) holder;
-                seckillViewHolder.setData(result.getSeckill_info());
-                break;
-            case RECOMMEND:
-                RecommendViewHolder recommendViewHolder = (RecommendViewHolder) holder;
-                recommendViewHolder.setData(result.getRecommend_info());
-                break;
-            case HOT:
-                HotViewHolder hotViewHolder = (HotViewHolder) holder;
-                hotViewHolder.setData(result.getHot_info());
-        }
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return 6;
-    }
-}
