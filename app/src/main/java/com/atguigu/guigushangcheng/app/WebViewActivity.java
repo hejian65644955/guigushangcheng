@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,6 +23,9 @@ import com.atguigu.guigushangcheng.utils.Constants;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+
+import static android.R.attr.data;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -74,8 +78,16 @@ public class WebViewActivity extends AppCompatActivity {
                 return true;
             }
         });
+        //添加
+        webview.addJavascriptInterface(new MyJavascriptInterface(),"cyc");
         webview.loadUrl(Constants.BASE_URL_IMAGE+webViewBean.getUrl());
 
+    }
+    class MyJavascriptInterface{
+        @JavascriptInterface
+        public void jumpForAndroid(String data){
+            Toast.makeText(WebViewActivity.this, "data=="+data, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick({R.id.ib_back, R.id.ib_more})

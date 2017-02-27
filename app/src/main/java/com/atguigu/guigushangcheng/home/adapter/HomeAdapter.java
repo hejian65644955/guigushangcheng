@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.atguigu.guigushangcheng.R;
 import com.atguigu.guigushangcheng.app.WebViewActivity;
@@ -153,7 +152,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.inject(this, itemView);
         }
 
-        public void setData(List<HomeBean.ResultBean.HotInfoBean> hot_info) {
+        public void setData(final List<HomeBean.ResultBean.HotInfoBean> hot_info) {
             adapter = new HotGridViewAdapter(mContext, hot_info);
             gvHot.setAdapter(adapter);
 
@@ -161,7 +160,17 @@ public class HomeAdapter extends RecyclerView.Adapter {
             gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.HotInfoBean hotInfoBean = hot_info.get(position);
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setName(hotInfoBean.getName());
+                    goodsBean.setProduct_id(hotInfoBean.getProduct_id());
+                    goodsBean.setCover_price(hotInfoBean.getCover_price());
+                    goodsBean.setFigure(hotInfoBean.getFigure());
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
+
                 }
 
             });
@@ -225,7 +234,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
             ButterKnife.inject(this, itemView);
         }
 
-        public void setData(HomeBean.ResultBean.SeckillInfoBean seckill_info) {
+        public void setData(final HomeBean.ResultBean.SeckillInfoBean seckill_info) {
             adapter = new SeckillRecyclerViewAdapter(mContext, seckill_info);
             rvSeckill.setAdapter(adapter);
             //设置布局管理器
@@ -234,7 +243,17 @@ public class HomeAdapter extends RecyclerView.Adapter {
             adapter.setOnItemClickListener(new SeckillRecyclerViewAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View v, int position) {
-                    Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "position==" + position, Toast.LENGTH_SHORT).show();
+                    HomeBean.ResultBean.SeckillInfoBean.ListBean infoBean = seckill_info.getList().get(position);
+                    //商品新的的Bean对象
+                    GoodsBean goodsBean = new GoodsBean();
+                    goodsBean.setProduct_id(infoBean.getProduct_id());
+                    goodsBean.setCover_price(infoBean.getCover_price());
+                    goodsBean.setFigure(infoBean.getFigure());
+                    goodsBean.setName(infoBean.getName());
+                    Intent intent = new Intent(mContext, GoodsInfoActivity.class);
+                    intent.putExtra(GOODS_BEAN,goodsBean);
+                    mContext.startActivity(intent);
                 }
             });
 
