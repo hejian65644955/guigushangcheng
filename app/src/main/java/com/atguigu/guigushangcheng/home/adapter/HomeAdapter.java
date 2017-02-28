@@ -430,6 +430,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 case HOT:
                     HotViewHolder hotViewHolder = (HotViewHolder) holder;
                     hotViewHolder.setData(result.getHot_info());
+                    break;
             }
 
 

@@ -34,12 +34,10 @@ public class CartStorage {
             GoodsBean goodsBean = beanList.get(i);
             sparseArray.put(Integer.parseInt(goodsBean.getProduct_id()), goodsBean);
 
-
-
         }
     }
 
-    private List<GoodsBean> getAllData() {
+    public List<GoodsBean> getAllData() {
 
         return getLocalData();
     }

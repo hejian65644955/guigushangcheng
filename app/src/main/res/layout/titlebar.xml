@@ -54,6 +54,5 @@
         android:drawablePadding="3dp"
         android:drawableTop="@drawable/new_message_icon"
         android:text="消息"
-        android:textColor="#fff"/>
-
+        android:textColor="#fff" />
 </LinearLayout>

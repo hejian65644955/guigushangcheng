@@ -14,5 +14,4 @@
         app:indicator_width="5dp"
         app:image_scale_type="fit_xy"
         app:is_auto_play="true" />
-
 </LinearLayout>
