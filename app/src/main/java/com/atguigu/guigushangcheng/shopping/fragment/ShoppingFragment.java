@@ -23,6 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static android.R.attr.checked;
+
 /**
  * Created by lenovo on 2017/2/22.
  */
@@ -57,6 +59,7 @@ public class ShoppingFragment extends BaseFragment {
     @InjectView(R.id.ll_empty_shopcart)
     LinearLayout llEmptyShopcart;
     private ShoppingCartAdapter shoppingCartAdapter;
+    private List<GoodsBean> list;
 
     @Override
     public View initView() {
@@ -69,14 +72,31 @@ public class ShoppingFragment extends BaseFragment {
     public void initData() {
         super.initData();
         Log.e("TAG", "购物车主页页面被初始化了");
-        List<GoodsBean> list = CartStorage.getInstance(mContext).getAllData();
-        if(list!=null &&list.size()>0){
+        list = CartStorage.getInstance(mContext).getAllData();
+        if(list !=null && list.size()>0){
             //购物车有数据
             llEmptyShopcart.setVisibility(View.GONE);
             shoppingCartAdapter = new ShoppingCartAdapter(mContext, list,tvShopcartTotal,checkboxAll,checkboxDeleteAll);
             recyclerview.setAdapter(shoppingCartAdapter);
             //设置布局管理器
             recyclerview.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+            //设置监听
+            shoppingCartAdapter.setOnItemClickListener(new ShoppingCartAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClickListener(View view, int position) {
+                    //设置Bean对象的取反
+                    GoodsBean goodsBean = list.get(position);
+                    goodsBean.setChecked(!goodsBean.isChecked());
+                    shoppingCartAdapter.notifyItemChanged(position);
+                    //刷新价格
+                    shoppingCartAdapter.showTotalPrice();
+                    //是否是全选
+                    shoppingCartAdapter.checkAll();
+                }
+            });
+
+            //是否是全选
+            shoppingCartAdapter.checkAll();
         }else {
             llEmptyShopcart.setVisibility(View.VISIBLE);
         }
@@ -107,6 +127,9 @@ public class ShoppingFragment extends BaseFragment {
                 break;
             case R.id.checkbox_all:
                 Toast.makeText(mContext, "全选", Toast.LENGTH_SHORT).show();
+                boolean isChecked = checkboxAll.isChecked();
+                shoppingCartAdapter.check_none(isChecked);
+                shoppingCartAdapter.showTotalPrice();
                 break;
             case R.id.btn_check_out:
                 Toast.makeText(mContext, "结算", Toast.LENGTH_SHORT).show();

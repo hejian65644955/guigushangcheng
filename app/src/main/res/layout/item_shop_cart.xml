@@ -12,7 +12,6 @@
         android:padding="10dp">
 
         <CheckBox
-            android:checked="true"
             android:clickable="false"
             android:id="@+id/cb_gov"
             android:layout_width="wrap_content"

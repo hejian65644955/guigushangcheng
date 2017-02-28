@@ -39,12 +39,12 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         showTotalPrice();
     }
 
-    private void showTotalPrice() {
+    public void showTotalPrice() {
         //显示总价格
         tvShopcartTotal.setText("合计："+getTotalPrice());
     }
 
-    private double getTotalPrice() {
+    public double getTotalPrice() {
         double totalPrice =0;
         if(datas !=null && datas.size()>0){
         for(int i = 0; i < datas.size(); i++) {
@@ -73,6 +73,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.tvDescGov.setText(goodsBean.getName());
         //设置价格
         holder.tvPriceGov.setText("￥" + goodsBean.getCover_price());
+        holder.cbGov.setChecked(goodsBean.isChecked());
+
 
         //设置数量
         holder.addSubView.setValue(goodsBean.getNumber());
@@ -87,6 +89,22 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     @Override
     public int getItemCount() {
         return datas.size();
+    }
+
+    public void check_none(boolean isChecked) {
+        if(datas != null && datas.size() >0){
+            for (int i=0;i<datas.size();i++){
+                GoodsBean goodsBean = datas.get(i);
+                //设置是否勾选状态
+                goodsBean.setChecked(isChecked);
+                checkboxAll.setChecked(isChecked);
+                checkboxDeleteAll.setChecked(isChecked);
+
+                //更新视图
+                notifyItemChanged(i);
+            }
+
+        }
     }
 
 
@@ -105,6 +123,60 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         ViewHolder(View view) {
             super(view);
             ButterKnife.inject(this, view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(itemClickListener!=null){
+                        itemClickListener.onItemClickListener(v,getLayoutPosition());
+                    }
+                }
+            });
         }
     }
+
+    //校验是否全选
+    public void checkAll(){
+        if(datas.size()>0&& datas!=null){
+            int number =0;
+            for(int i = 0; i <datas.size() ; i++) {
+                GoodsBean goodsBean = datas.get(i);
+                if(!goodsBean.isChecked()){
+                    //只要有一个不勾选
+                    checkboxAll.setChecked(false);
+                    this.checkboxDeleteAll.setChecked(false);
+                }
+                number++;
+
+            }
+            if(number == datas.size()){
+                    checkboxAll.setChecked(true);
+                    this.checkboxDeleteAll.setChecked(true);
+
+            }
+        }else {
+            checkboxAll.setChecked(false);
+            this.checkboxDeleteAll.setChecked(false);
+
+        }
+    }
+
+
+    //回调点击事件的监听
+    private OnItemClickListener itemClickListener;
+
+    /**
+     * 点击item的监听
+     */
+    public interface OnItemClickListener {
+        public void onItemClickListener(View view, int position);
+    }
+
+    /**
+     * 设置item的监听
+     * @param l
+     */
+    public void setOnItemClickListener(OnItemClickListener l) {
+        this.itemClickListener = l;
+    }
+
 }
