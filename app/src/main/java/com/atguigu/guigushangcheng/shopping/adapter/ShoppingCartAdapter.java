@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.atguigu.guigushangcheng.R;
 import com.atguigu.guigushangcheng.home.bean.GoodsBean;
+import com.atguigu.guigushangcheng.shopping.utils.CartStorage;
 import com.atguigu.guigushangcheng.shopping.view.AddSubView;
 import com.atguigu.guigushangcheng.utils.Constants;
 import com.bumptech.glide.Glide;
@@ -66,7 +67,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     @Override
     public void onBindViewHolder(ShoppingCartAdapter.ViewHolder holder, int position) {
 
-        GoodsBean goodsBean = datas.get(position);
+        final GoodsBean goodsBean = datas.get(position);
         Glide.with(mContext).load(Constants.BASE_URL_IMAGE + goodsBean.getFigure()).into(holder.ivGov);
         //设置名称
 
@@ -82,6 +83,20 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.addSubView.setMinValue(1);
         //设置库存-来自服务器-
         holder.addSubView.setMaxValue(100);
+
+        holder.addSubView.setOnNumberChangerListener(new AddSubView.OnNumberChangerListener() {
+            @Override
+            public void onNumberChanger(int value) {
+                //1.回调数量
+                goodsBean.setNumber(value);
+
+                CartStorage.getInstance(mContext).updateData(goodsBean);
+
+                showTotalPrice();
+
+            }
+        });
+
 
 
     }
@@ -106,6 +121,28 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         }
     }
+
+
+    /**
+     * 删除数据
+     */
+    public void deleteData() {
+        if(datas != null && datas.size() >0){
+            for (int i=0;i<datas.size();i++){
+                GoodsBean goodsBean = datas.get(i);
+                if(goodsBean.isChecked()){
+                    //1.内存中删除
+                    datas.remove(goodsBean);
+                    //2.本地也好保持
+                    CartStorage.getInstance(mContext).deleteData(goodsBean);
+                    //刷新数据
+                    notifyItemRemoved(i);
+                    i--;
+                }
+            }
+        }
+    }
+
 
 
     class ViewHolder  extends RecyclerView.ViewHolder{
@@ -143,19 +180,21 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 if(!goodsBean.isChecked()){
                     //只要有一个不勾选
                     checkboxAll.setChecked(false);
-                    this.checkboxDeleteAll.setChecked(false);
+                    checkboxDeleteAll.setChecked(false);
+                }else {
+
+                    number++;
                 }
-                number++;
 
             }
-            if(number == datas.size()){
+            if(  datas.size()==number){
                     checkboxAll.setChecked(true);
-                    this.checkboxDeleteAll.setChecked(true);
+                    checkboxDeleteAll.setChecked(true);
 
             }
         }else {
             checkboxAll.setChecked(false);
-            this.checkboxDeleteAll.setChecked(false);
+            checkboxDeleteAll.setChecked(false);
 
         }
     }
