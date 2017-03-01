@@ -1,6 +1,7 @@
 package com.atguigu.guigushangcheng.home.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.guigushangcheng.R;
+import com.atguigu.guigushangcheng.app.CallCenterActivity;
 import com.atguigu.guigushangcheng.home.adapter.HomeAdapter;
 import com.atguigu.guigushangcheng.home.bean.GoodsBean;
 import com.atguigu.guigushangcheng.shopping.utils.CartStorage;
@@ -153,7 +155,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.tv_good_info_callcenter:
-                Toast.makeText(GoodsInfoActivity.this, "客服中心", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(GoodsInfoActivity.this, "客服中心", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(GoodsInfoActivity.this, CallCenterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tv_good_info_collection:
                 Toast.makeText(GoodsInfoActivity.this, "收藏", Toast.LENGTH_SHORT).show();
