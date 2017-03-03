@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.e("TAG", "联网请求成功");
+                        Log.e("TAG", "联网请求成功"+response);
                         processData(response);
 
                     }

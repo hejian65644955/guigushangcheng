@@ -271,6 +271,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 window.dismiss();
                 //添加购物车
                 CartStorage.getInstance(GoodsInfoActivity.this).addData(tempGoodsBean);
+
                 Log.e("TAG", "66:" + tempGoodsBean.toString());
                 Toast.makeText(GoodsInfoActivity.this, "添加购物车成功", Toast.LENGTH_SHORT).show();
             }
