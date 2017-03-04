@@ -64,6 +64,9 @@ public class ListFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 leftAdapter.changeSelected(position);
                 leftAdapter.notifyDataSetChanged();
+                //联网请求
+                getDataFromNet(urls[position]);
+
             }
         });
 

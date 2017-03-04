@@ -9,11 +9,11 @@ public class Constants {
 
     //public static String BASE_URL = "http://192.168.51.104:8080/atguigu";
 //    public static String BASE_URL = "http://192.168.14.165:8080/atguigu";
-   //public static String BASE_URL = "http://192.168.1.18:8080/atguigu";
+   public static String BASE_URL = "http://192.168.1.18:8080/atguigu";
 
     //本地的模拟器
 //    public static String BASE_URL = "http://10.0.2.2:8080/atguigu";
-    public static String BASE_URL = "http://182.92.5.3:8081/android/resources";
+    //public static String BASE_URL = "http://182.92.5.3:8081/android/resources";
 
 
     private static final String BASE_URL_JSON = BASE_URL+"/json/";

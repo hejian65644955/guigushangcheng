@@ -37,7 +37,7 @@ public class TypeFragment extends BaseFragment {
 
     @Override
     public View initView() {
-        View view = View.inflate(mContext, R.layout.fragment_tag, null);
+        View view = View.inflate(mContext, R.layout.fragment_type, null);
         ButterKnife.inject(this, view);
         return view;
     }
