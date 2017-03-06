@@ -1,5 +1,6 @@
 package com.atguigu.guigushangcheng;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -103,5 +104,10 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new UserFragment());
     }
 
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int id= intent.getIntExtra("checkedid", R.id.rb_cart);
+        rgMain.check(id);
+    }
 }

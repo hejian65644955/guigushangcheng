@@ -3,6 +3,7 @@ package com.atguigu.guigushangcheng.shopping.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.atguigu.guigushangcheng.MainActivity;
 import com.atguigu.guigushangcheng.R;
 import com.atguigu.guigushangcheng.base.BaseFragment;
 import com.atguigu.guigushangcheng.home.bean.GoodsBean;
@@ -235,7 +237,10 @@ public class ShoppingFragment extends BaseFragment {
                 Toast.makeText(mContext, "收藏", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_empty_cart_tobuy:
-                Toast.makeText(mContext, "去逛逛", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "去逛逛", Toast.LENGTH_SHORT).show();
+                Intent intent  =new Intent(mContext, MainActivity.class);
+                intent.putExtra("checkedid",R.id.rb_home);
+                startActivity(intent);
                 break;
         }
 
