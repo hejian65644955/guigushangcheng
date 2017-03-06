@@ -38,7 +38,8 @@
 
         <!-- alipay sdk end -->
         <activity android:name=".app.CallCenterActivity" />
-        <activity android:name=".user.activity.LoginActivity"></activity>
+        <activity android:name=".user.activity.LoginActivity" />
+        <activity android:name=".home.activity.GoodsListActivity"></activity>
     </application>
 
 </manifest>

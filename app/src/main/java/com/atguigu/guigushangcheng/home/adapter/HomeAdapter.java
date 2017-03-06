@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.atguigu.guigushangcheng.R;
 import com.atguigu.guigushangcheng.app.WebViewActivity;
 import com.atguigu.guigushangcheng.home.activity.GoodsInfoActivity;
+import com.atguigu.guigushangcheng.home.activity.GoodsListActivity;
 import com.atguigu.guigushangcheng.home.bean.GoodsBean;
 import com.atguigu.guigushangcheng.home.bean.HomeBean;
 import com.atguigu.guigushangcheng.home.bean.WebviewBean;
@@ -210,8 +211,6 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mContext, GoodsInfoActivity.class);
                     intent.putExtra(GOODS_BEAN, goodsBean);
                     mContext.startActivity(intent);
-
-
                 }
             });
 
@@ -325,6 +324,17 @@ public class HomeAdapter extends RecyclerView.Adapter {
             //设置Gridview适配器
             ChannelAdapter channelAdapter = new ChannelAdapter(mContext, channel_info);
             gvChannel.setAdapter(channelAdapter);
+
+            gvChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(position<9){
+                        Intent intent = new Intent(mContext,GoodsListActivity.class);
+                        intent.putExtra("position",position);
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
 
         }
     }
